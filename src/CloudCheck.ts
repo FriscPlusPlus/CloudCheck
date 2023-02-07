@@ -5,9 +5,9 @@ interface IResults {
   cloudFlare: boolean;
 }
 
-enum IPType {
-  IPV4,
-  IPV6,
+interface ICloudFlareIPs {
+  IPV4: string[];
+  IPV6: string[];
 }
 
 enum EndPoints {
@@ -15,26 +15,22 @@ enum EndPoints {
   IPv6 = "https://www.cloudflare.com/ips-v6",
 }
 
+type Targets = string | string[];
+
 export class CloudCheck {
   constructor() {}
-  private async getIPS(ipType: IPType): Promise<string[]> {
-    let IPs: string[];
-    let response;
-    switch (ipType) {
-      case IPType.IPV4:
-        response = await fetch(EndPoints.IPv4);
-        break;
-      case IPType.IPV6:
-        response = await fetch(EndPoints.IPv6);
-        break;
-    }
-    IPs = (await response.text()).split("\n");
-    return IPs;
+
+  public async check(targets: Targets): Promise<IResults[]> {
+    const IPs: ICloudFlareIPs = await this.getIPS();
   }
 
-  public async init() {
-    console.log(
-      await (await fetch("https://www.cloudflare.com/ips-v4")).text()
-    );
+  private async getIPS(): Promise<ICloudFlareIPs> {
+    const IPV4: string = await (await fetch(EndPoints.IPv4)).text();
+    const IPV6: string = await (await fetch(EndPoints.IPv6)).text();
+    const IPs: ICloudFlareIPs = {
+      IPV4: IPV4.split("\n"),
+      IPV6: IPV6.split("\n"),
+    };
+    return IPs;
   }
 }

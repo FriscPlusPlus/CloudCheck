@@ -1,4 +1,4 @@
 import { CloudCheck } from "./src/CloudCheck.ts";
 
-const check = new CloudCheck();
-await check.init();
+//const check = new CloudCheck();
+//await check.init();

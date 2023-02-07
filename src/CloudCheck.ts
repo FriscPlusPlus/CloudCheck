@@ -3,6 +3,7 @@ import { V4Address, V6Address } from "https://deno.land/x/ipaddr@2.0.0/mod.ts";
 interface IResults {
   ip: string;
   cloudFlare: boolean;
+  ipType: IPType;
 }
 
 interface ICloudFlareIPs {
@@ -15,6 +16,12 @@ enum EndPoints {
   IPv6 = "https://www.cloudflare.com/ips-v6",
 }
 
+enum IPType {
+  IPV4,
+  IPV6,
+  NONE
+}
+
 type Targets = string | string[];
 
 export class CloudCheck {
@@ -22,6 +29,11 @@ export class CloudCheck {
 
   public async check(targets: Targets): Promise<IResults[]> {
     const IPs: ICloudFlareIPs = await this.getIPS();
+  }
+
+  private getIPsType(targets: Targets): IResults[] {
+    let results: IResults[];
+    return results;
   }
 
   private async getIPS(): Promise<ICloudFlareIPs> {
